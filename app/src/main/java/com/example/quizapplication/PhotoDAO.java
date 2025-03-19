@@ -10,11 +10,8 @@ import java.util.List;
 
 @Dao
 public interface PhotoDAO {
-
     @Insert
     void insert(PhotoEntity photo);
-
-
 
     @Insert
     void insertAll(List<PhotoEntity> photos);

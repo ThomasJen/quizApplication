@@ -132,4 +132,8 @@ public class MainActivity extends AppCompatActivity implements CustomAdapter.OnP
         QuizViewModel quizViewModel = new ViewModelProvider(this).get(QuizViewModel.class);
         quizViewModel.deletePhoto(photo);
     }
+
+    public void insertTestPhoto() {
+        quizViewModel.addPhoto("Gorilla", null, "android.resource://com.example.quizapplication/drawable/gorilla");
+    }
 }

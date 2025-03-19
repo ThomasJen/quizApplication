@@ -19,13 +19,13 @@
       <SelectionState runConfigName="testScoreUpdatesCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Phototest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="testAddingAndDeletingPictureEntry()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="useAppContext()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testImageAddedToRecyclerView()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -6,6 +6,7 @@ import android.net.Uri;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 
 public class QuizViewModel extends AndroidViewModel {
     private final PhotoDAO photoDao;
@@ -38,8 +40,6 @@ public class QuizViewModel extends AndroidViewModel {
             }
             });
         }
-
-
     public LiveData<List<PhotoEntity>> getPhotoList() {
         return photoList;
     }
@@ -97,7 +97,11 @@ public class QuizViewModel extends AndroidViewModel {
             }
         }).start();
     }
-
+    public LiveData<Integer> getPhotoCount() {
+        return Transformations.map(photoList, photoEntities ->
+                photoEntities != null ? photoEntities.size() : 0
+        );
+    }
     public String getCorrectAnswers() {
         return photoList.getValue().get(currentIndex).getName();
     }
