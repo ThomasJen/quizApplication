@@ -10,16 +10,19 @@ import java.util.List;
 
 @Dao
 public interface PhotoDAO {
+
+    // Metode for å sette inn en PhotoEntity i databasen
     @Insert
     void insert(PhotoEntity photo);
 
     @Insert
     void insertAll(List<PhotoEntity> photos);
 
+    // Spørring for å hente alle PhotoEntity-ene fra databasen
     @Query("SELECT * FROM photos")
     List<PhotoEntity> getAllPhotosSync();
 
-
+    // LiveData-metode for å observere endringer i PhotoEntity-ene i databasen
     @Query("SELECT * FROM photos")
     LiveData<List<PhotoEntity>> getAllPhotos();
 
@@ -29,6 +32,7 @@ public interface PhotoDAO {
     @Query("DELETE FROM photos")
     void deleteAllPhotos();
 
+    // Metode for å fjerne en PhotoEntity fra databasen
     @Delete
     void delete(PhotoEntity photo);
 

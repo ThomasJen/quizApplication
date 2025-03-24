@@ -17,21 +17,13 @@ import org.junit.runner.RunWith;
 public class MainTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule =
-            new ActivityScenarioRule<>(MainActivity.class);
+            new ActivityScenarioRule<>(MainActivity.class);   //Definerer en JUnit test som starter MainActivity for hver test og lukker den etterpå automatisk. Tester med en fersk instans
 
     @Test
     public void testNavigationToPhotoActivity() {
-        onView(withId(R.id.btnStartQuiz)).perform(click());
+        onView(withId(R.id.btnStartQuiz)).perform(click()); // Finner knappen med id btnStartQuiz og simulerer et klikk på den
 
-        onView(withId(R.id.btnBackToMain)).check(matches(isDisplayed()));
+        onView(withId(R.id.btnBackToMain)).check(matches(isDisplayed())); // Sjekker om knappen med id btnBackToMain er synlig, det bekrefter at navigasjonen til PhotoActivity gikk riktig
     }
 
-
-
-   /* @Test
-    public void testnavigationToActivity2() {
-        onView(withId(R.id.btnactivity2)).perform(click());
-
-        onView(withId(R.id.textViewName)).check(matches(isDisplayed()));
-    }*/
 }

@@ -14,32 +14,34 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
 
 public class QuizViewModel extends AndroidViewModel {
-    private final PhotoDAO photoDao;
-    private final MutableLiveData<List<PhotoEntity>> photoList = new MutableLiveData<>();
-    private final ExecutorService executorService;
-
-    public int currentIndex = 0;
-    public int score = 0;
-
-    private final MutableLiveData<List<PhotoEntity>> sortedPhotos = new MutableLiveData<>();
+    private final PhotoDAO photoDao; // Henter DAO for å kunne bruke databaseoperasjoner
+    private final MutableLiveData<List<PhotoEntity>> photoList = new MutableLiveData<>();   // LiveData  for å observere endringer i listen
+    private final ExecutorService executorService;  // ExecutorService for å kjøre databaseoperasjoner i bakgrunnen
+    public int currentIndex = 0;    // Indeks for current question
+    public int score = 0;           // Score for current round
 
     public QuizViewModel(Application application) {
+
+        // Henter databasen via Appdatabase og setter opp photoDao og executorService
         super(application);
         AppDatabase db = AppDatabase.getDatabase(application);
         photoDao = db.photoDAO();
         executorService = Executors.newSingleThreadExecutor();
 
+        // Setter inn standardbilder dersom databasen er tom
         initializeDefaultAnimals();
 
+        // Henter alle bilder fra databasen og oppdaterer photoList
         photoDao.getAllPhotos().observeForever(photos -> {
             if(photos != null) {
                 photoList.postValue(photos);
             }
             });
         }
+
+    // returnerer LiveData-lista med bilder
     public LiveData<List<PhotoEntity>> getPhotoList() {
         return photoList;
     }
@@ -58,6 +60,7 @@ public class QuizViewModel extends AndroidViewModel {
         });
     }
 
+    // Metode for å legge til nye bilder i databasen
     public void addPhoto(String name, Integer imageResID, String imagePath) {
         new Thread(() -> {
 
@@ -71,11 +74,14 @@ public class QuizViewModel extends AndroidViewModel {
     }
     public void deletePhoto(PhotoEntity photo) {
         new Thread(() -> {
-            photoDao.delete(photo); // Deletes the photo from Room database
+            photoDao.delete(photo); // Sletter bildet fra Room-databasen
         }).start();
     }
 
+    // Sortere listen i alfabetisk rekkefølge
     public void sortPhotosAZ() {
+
+        // Henter listen fra LiveData og lager en ny liste med sorterte bilder
         new Thread(() -> {
             List<PhotoEntity> currentList = photoList.getValue();
             if (currentList != null) {
@@ -88,6 +94,8 @@ public class QuizViewModel extends AndroidViewModel {
     }
 
     public void sortPhotosZA() {
+
+        // Henter listen fra LiveData og lager en ny liste med sorterte bilder
         new Thread(() -> {
             List<PhotoEntity> currentList = photoList.getValue();
             if (currentList != null) {
@@ -97,12 +105,11 @@ public class QuizViewModel extends AndroidViewModel {
             }
         }).start();
     }
+
+    // Metode for testingen av antall bilder i databasen
     public LiveData<Integer> getPhotoCount() {
         return Transformations.map(photoList, photoEntities ->
                 photoEntities != null ? photoEntities.size() : 0
         );
-    }
-    public String getCorrectAnswers() {
-        return photoList.getValue().get(currentIndex).getName();
     }
 }
